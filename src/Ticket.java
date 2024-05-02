@@ -3,9 +3,9 @@ import java.util.Random;
 public class Ticket {
     private int ticketId;
     private Vehicle vehicle;
-    private int slot;
+    private ParkingSpot slot;
 
-    public Ticket(Vehicle vehicle, int slot) {
+    public Ticket(Vehicle vehicle, ParkingSpot slot) {
         Random rand = new Random();
         this.ticketId = rand.nextInt();
         this.vehicle = vehicle;
@@ -28,11 +28,11 @@ public class Ticket {
         this.vehicle = vehicle;
     }
 
-    public int getSlot() {
+    public ParkingSpot getSlot() {
         return slot;
     }
 
-    public void setSlot(int slot) {
+    public void setSlot(ParkingSpot slot) {
         this.slot = slot;
     }
 

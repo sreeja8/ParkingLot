@@ -3,42 +3,31 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ParkingLotManager {
-    private List<Boolean> slotList;
-    private int total_slots;
+//    private List<Boolean> slotList;
+//    private int total_slots;
+    private ParkingLot parkingLot;
 
-    public ParkingLotManager(int slot) {
-        this.total_slots=slot;
-        this.slotList = new ArrayList<>();
-        for (int i = 0; i < slot; i++) {
-            this.slotList.add(false);
-        }
+    public ParkingLotManager(ParkingLot parkingLot) {
+        this.parkingLot = parkingLot;
     }
 
     public Ticket park(Vehicle vehicle) {
-        int emptySlot = getEmptySlot();
-        slotList.set(emptySlot, true);
-        Ticket ticket = new Ticket(vehicle, emptySlot);
+        ArrayList<ParkingSpot> emptySlotsList = parkingLot.getEmptySlots();
+        if(emptySlotsList.size() == 0){
+            throw new RuntimeException("No Parking Spot available!!");
+        }
+        ParkingSpot parkingSpot = emptySlotsList.get(0);
+        parkingLot.occupy(parkingSpot);
+        Ticket ticket = new Ticket(vehicle, parkingSpot);
         return ticket;
     }
 
-    private int getEmptySlot() {
-        int emptySlot=0;
-        //System.out.printf("s: "+ this.slotList.get(0));
-        for (Boolean filledSlot : slotList) {
-            if (!filledSlot) {
-                //System.out.println("Empty slot" + emptySlot);
-                return emptySlot;
-            }
-            //System.out.println("Empty slot" + emptySlot);
-            emptySlot++;
-        }
-        throw new RuntimeException("No empty slot found");
-    }
+
 
     public void unpark(Ticket ticket1) {
-        int free_slot = ticket1.getSlot();
-        slotList.set(free_slot,false);
+        ParkingSpot occupiedSlot = ticket1.getSlot();
+        parkingLot.free(occupiedSlot);
         ticket1 = null;
-        System.out.println("Next empty slot"+ getEmptySlot());
+        System.out.println("Next available slot"+ parkingLot.getEmptySlots());
     }
 }
